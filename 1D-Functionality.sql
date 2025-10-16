@@ -431,7 +431,183 @@ FROM movie.find_coplayers('nm0000206')
 LIMIT 15;
 
 
+--1-D.7
+CREATE TABLE IF NOT EXISTS movie.name_rating (
+  nconst       TEXT PRIMARY KEY REFERENCES movie.person(nconst) ON DELETE CASCADE,
+  weighted_avg NUMERIC(3,1),
+  total_votes  BIGINT,
+  rated_titles INT,
+  updated_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE OR REPLACE FUNCTION movie.refresh_all_name_ratings()
+RETURNS VOID
+LANGUAGE sql AS $$
+  WITH agg AS (
+    SELECT
+      c.nconst,
+      SUM(tr.average_rating * tr.num_votes)::NUMERIC / NULLIF(SUM(tr.num_votes),0) AS wavg,
+      SUM(tr.num_votes)::BIGINT AS tvotes,
+      COUNT(*)                  AS rated_titles
+    FROM movie.credit       AS c
+    JOIN movie.title_rating AS tr ON tr.tconst = c.tconst
+    GROUP BY c.nconst
+  )
+  INSERT INTO movie.name_rating (nconst, weighted_avg, total_votes, rated_titles, updated_at)
+  SELECT a.nconst, ROUND(a.wavg,1), a.tvotes, a.rated_titles, now()
+  FROM agg a
+  ON CONFLICT (nconst) DO UPDATE
+    SET weighted_avg = EXCLUDED.weighted_avg,
+        total_votes  = EXCLUDED.total_votes,
+        rated_titles = EXCLUDED.rated_titles,
+        updated_at   = now();
+$$;
 
+-- Run it once to populate data
+SELECT movie.refresh_all_name_ratings();
+SELECT
+  nr.nconst,
+  p.primary_name,
+  nr.weighted_avg,
+  nr.total_votes,
+  nr.rated_titles
+FROM movie.name_rating AS nr
+JOIN movie.person     AS p
+  ON p.nconst = nr.nconst
+ORDER BY nr.total_votes DESC
+LIMIT 10;
 
+--1-D.8
 
+-- Popular cast for a given title (ordered by our name ratings)
+CREATE OR REPLACE FUNCTION framework.popular_cast_for_title(
+  p_user_id BIGINT,
+  p_tconst  TEXT,
+  p_top_n   INT DEFAULT 25
+)
+RETURNS TABLE (
+  nconst        TEXT,
+  primary_name  TEXT,
+  category      TEXT,
+  weighted_avg  NUMERIC(3,1),
+  total_votes   BIGINT
+)
+LANGUAGE plpgsql AS $$
+BEGIN
+  -- Log the request (framework in play)
+  INSERT INTO framework.user_search_history(user_id, query_text)
+  VALUES (p_user_id, 'popular_cast_for_title=' || p_tconst);
 
+  -- Return cast ordered by popularity; names without ratings sink to the bottom
+  RETURN QUERY
+  SELECT
+    c.nconst,
+    p.primary_name,
+    c.category,
+    COALESCE(nr.weighted_avg, 0.0) AS weighted_avg,
+    COALESCE(nr.total_votes, 0)    AS total_votes
+  FROM movie.credit AS c
+  JOIN movie.person AS p
+    ON p.nconst = c.nconst
+  LEFT JOIN movie.name_rating AS nr
+    ON nr.nconst = c.nconst
+  WHERE c.tconst = p_tconst
+    AND c.category IN ('actor','actress')   -- tighten/relax as you prefer
+  ORDER BY
+    COALESCE(nr.weighted_avg, 0.0) DESC,
+    COALESCE(nr.total_votes, 0)    DESC,
+    p.primary_name
+  LIMIT p_top_n;
+END $$;
+
+-- Find a sample tconst to try
+SELECT tconst, primary_title FROM movie.title
+WHERE primary_title ILIKE '%Matrix%' LIMIT 1;
+
+-- Then:
+SELECT *
+FROM framework.popular_cast_for_title(
+  framework.get_user_id('shibz'),
+  'tt13773598',   -- replace with your Matrix tconst (or any movie)
+  15
+);
+
+--1-D.9
+
+-- STEP 1: see which categories exist and how common they are
+SELECT category, COUNT(*) AS rows
+FROM movie.credit
+GROUP BY category
+ORDER BY rows DESC
+LIMIT 20;
+
+-- also grab a "cast-heavy" movie to test with later
+SELECT t.tconst, t.primary_title, COUNT(*) AS credit_rows
+FROM movie.title t
+JOIN movie.credit c ON c.tconst = t.tconst
+GROUP BY t.tconst, t.primary_title
+ORDER BY credit_rows DESC
+LIMIT 5;
+
+-- STEP 2: core function (similar by shared cast, flexible categories)
+CREATE OR REPLACE FUNCTION framework.similar_movies_by_cast(
+  p_user_id   BIGINT,
+  p_tconst    TEXT,
+  p_top_n     INT  DEFAULT 20,
+  p_cat_regex TEXT DEFAULT '^(actor|actress)$'  -- widen to: 'actor|actress|voice|self|cast'
+)
+RETURNS TABLE (
+  tconst         TEXT,
+  primary_title  TEXT,
+  shared_actors  INT,
+  average_rating NUMERIC(3,1),
+  num_votes      INT
+)
+LANGUAGE plpgsql AS $$
+BEGIN
+  -- 1) log the call
+  INSERT INTO framework.user_search_history(user_id, query_text)
+  VALUES (p_user_id, 'similar_movies_by_cast=' || p_tconst || '; cat=' || p_cat_regex);
+
+  -- 2) compute overlap; use a non-reserved CTE name
+  RETURN QUERY
+  WITH target_cast AS (
+    SELECT DISTINCT c.nconst
+    FROM movie.credit c
+    WHERE c.tconst = p_tconst
+      AND (p_cat_regex IS NULL OR c.category ~* p_cat_regex)
+  ),
+  cast_overlap AS (
+    SELECT
+      c2.tconst,
+      COUNT(DISTINCT c2.nconst) AS shared_actors
+    FROM movie.credit c2
+    JOIN target_cast tc ON tc.nconst = c2.nconst
+    WHERE c2.tconst <> p_tconst
+      AND (p_cat_regex IS NULL OR c2.category ~* p_cat_regex)
+    GROUP BY c2.tconst
+  )
+  SELECT
+    co.tconst,
+    t.primary_title,
+    co.shared_actors::INT,
+    tr.average_rating,
+    tr.num_votes
+  FROM cast_overlap co
+  JOIN movie.title t       ON t.tconst = co.tconst
+  LEFT JOIN movie.title_rating tr ON tr.tconst = co.tconst
+  ORDER BY
+    co.shared_actors DESC,
+    COALESCE(tr.average_rating, 0) DESC,
+    COALESCE(tr.num_votes, 0)    DESC,
+    t.primary_title
+  LIMIT p_top_n;
+END $$;
+
+-- STEP 3: test (use a tconst you found above)
+SELECT *
+FROM framework.similar_movies_by_cast(
+  framework.get_user_id('shibz'),
+  'tt10093280',
+  15,
+  'actor|actress|voice|self|cast'  -- start broad; narrow later if you want
+);
