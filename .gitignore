@@ -1,0 +1,16 @@
+# big raw data & dumps
+/raw/
+/raw/**
+
+*.backup
+*_backup.sql
+imdb_backup.sql
+
+# local DB artifacts
+*.log
+*.tmp
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
