@@ -611,22 +611,30 @@ FROM framework.similar_movies_by_cast(
   15,
   'actor|actress|voice|self|cast'  -- start broad; narrow later if you want
 );
---1-D.10--
-SET search_path = framework, movie, public;
-
+--1-D.10--Frequent person words (with logging)
 CREATE OR REPLACE FUNCTION framework.person_words(
+  p_user_id     BIGINT,
   p_person_name TEXT,
-  p_top_n INT DEFAULT 10
+  p_top_n       INT DEFAULT 10
 )
 RETURNS TABLE(word TEXT, freq BIGINT)
-LANGUAGE sql AS $$
+LANGUAGE plpgsql AS $$
+BEGIN
+  -- Log the request (framework in play)
+  INSERT INTO framework.user_search_history(user_id, query_text)
+  VALUES (p_user_id, 'person_words=' || p_person_name || '; limit=' || p_top_n);
+
+  -- Compute top-N words
+  RETURN QUERY
   WITH targets AS (
-    SELECT nconst FROM movie.person
+    SELECT nconst
+    FROM movie.person
     WHERE primary_name ILIKE '%' || p_person_name || '%'
   ),
   titles AS (
     SELECT DISTINCT c.tconst
-    FROM movie.credit c JOIN targets t ON t.nconst = c.nconst
+    FROM movie.credit c
+    JOIN targets t ON t.nconst = c.nconst
   ),
   stop AS (
     SELECT unnest(ARRAY[
@@ -644,7 +652,7 @@ LANGUAGE sql AS $$
   GROUP BY lower(w.word)
   ORDER BY freq DESC, word
   LIMIT p_top_n;
-$$;
+END $$;
 --1-D.11--
 CREATE OR REPLACE FUNCTION movie.exact_match(p_query TEXT)
 RETURNS TABLE (tconst TEXT, primary_title TEXT)
