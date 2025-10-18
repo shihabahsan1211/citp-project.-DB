@@ -170,6 +170,31 @@ SELECT DISTINCT tb.tconst, w
 FROM public.title_basics tb
 CROSS JOIN LATERAL regexp_split_to_table(lower(tb.primarytitle), '[^a-z0-9]+') AS w
 WHERE w <> '' AND length(w) >= 2;
+-- (A) PLOT -> wi  (from movie.omdb_extra.plot)
+INSERT INTO movie.wi (tconst, word)
+SELECT e.tconst, w
+FROM movie.omdb_extra e
+CROSS JOIN LATERAL regexp_split_to_table(lower(coalesce(e.plot,'')), '[^a-z0-9]+') AS w
+WHERE w <> '' AND length(w) >= 2
+ON CONFLICT DO NOTHING;
+
+-- (B) CHARACTERS -> wi  (from movie.credit.characters)
+INSERT INTO movie.wi (tconst, word)
+SELECT c.tconst, w
+FROM movie.credit c
+CROSS JOIN LATERAL regexp_split_to_table(lower(coalesce(c.characters,'')), '[^a-z0-9]+') AS w
+WHERE w <> '' AND length(w) >= 2
+ON CONFLICT DO NOTHING;
+
+-- (C) PERSON NAMES -> wi  (names of people in that title)
+INSERT INTO movie.wi (tconst, word)
+SELECT c.tconst, w
+FROM movie.credit c
+JOIN movie.person p ON p.nconst = c.nconst
+CROSS JOIN LATERAL regexp_split_to_table(lower(coalesce(p.primary_name,'')), '[^a-z0-9]+') AS w
+WHERE w <> '' AND length(w) >= 2
+ON CONFLICT DO NOTHING;
+\echo '--- END: WI PLOT ---'
 
 
 
