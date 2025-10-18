@@ -645,3 +645,21 @@ LANGUAGE sql AS $$
   ORDER BY freq DESC, word
   LIMIT p_top_n;
 $$;
+--1-D.11--
+CREATE OR REPLACE FUNCTION movie.exact_match(p_query TEXT)
+RETURNS TABLE (tconst TEXT, primary_title TEXT)
+LANGUAGE sql AS $$
+  WITH q AS (
+    SELECT DISTINCT lower(w) AS w
+    FROM regexp_split_to_table(lower(coalesce(p_query,'')), '[^a-z0-9]+') w
+    WHERE w <> '' AND length(w) >= 2
+  ),
+  need AS (SELECT COUNT(*)::int AS wcnt FROM q)
+  SELECT t.tconst, t.primary_title
+  FROM movie.wi wi
+  JOIN q            ON wi.word = q.w
+  JOIN movie.title t ON t.tconst = wi.tconst
+  GROUP BY t.tconst, t.primary_title
+  HAVING COUNT(DISTINCT q.w) = (SELECT wcnt FROM need)
+  ORDER BY t.primary_title;
+$$;
