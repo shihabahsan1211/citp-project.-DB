@@ -663,3 +663,31 @@ LANGUAGE sql AS $$
   HAVING COUNT(DISTINCT q.w) = (SELECT wcnt FROM need)
   ORDER BY t.primary_title;
 $$;
+--D-12--
+CREATE OR REPLACE FUNCTION movie.best_match(
+  p_limit INT,
+  VARIADIC p_words TEXT[]
+)
+RETURNS TABLE (tconst TEXT, primary_title TEXT, match_count INT)
+LANGUAGE sql AS $$
+  WITH q AS (
+    SELECT DISTINCT lower(trim(w)) AS w
+    FROM unnest(p_words) AS w
+    WHERE w IS NOT NULL AND trim(w) <> '' AND length(trim(w)) >= 2
+  )
+  SELECT
+    t.tconst,
+    t.primary_title,
+    COUNT(*)::INT AS match_count
+  FROM movie.wi wi
+  JOIN q            ON q.w = wi.word
+  JOIN movie.title t ON t.tconst = wi.tconst
+  LEFT JOIN movie.title_rating tr ON tr.tconst = t.tconst
+  GROUP BY t.tconst, t.primary_title, tr.num_votes, tr.average_rating
+  ORDER BY
+    match_count DESC,
+    COALESCE(tr.num_votes, 0) DESC,
+    COALESCE(tr.average_rating, 0) DESC,
+    t.primary_title
+  LIMIT p_limit;
+$$;
