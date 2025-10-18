@@ -653,7 +653,7 @@ BEGIN
   ORDER BY freq DESC, word
   LIMIT p_top_n;
 END $$;
---1-D.11--
+--1-D.11--Exact-match querying
 CREATE OR REPLACE FUNCTION movie.exact_match(p_query TEXT)
 RETURNS TABLE (tconst TEXT, primary_title TEXT)
 LANGUAGE sql AS $$
@@ -671,7 +671,7 @@ LANGUAGE sql AS $$
   HAVING COUNT(DISTINCT q.w) = (SELECT wcnt FROM need)
   ORDER BY t.primary_title;
 $$;
---D-12--movie.best_match
+--D-12--Best-match querying
 DROP FUNCTION IF EXISTS movie.best_match(TEXT);
 
 CREATE OR REPLACE FUNCTION movie.best_match(p_query TEXT)
@@ -692,3 +692,47 @@ LANGUAGE sql AS $$
 $$;
 
 SELECT * FROM movie.best_match('John wick') LIMIT 15;
+--1-D.13 Word-to-words querying
+SET search_path = movie, public;
+
+DROP FUNCTION IF EXISTS movie.word_to_words(TEXT, INT);
+DROP FUNCTION IF EXISTS movie.word_to_words(TEXT);
+
+CREATE OR REPLACE FUNCTION movie.word_to_words(p_query TEXT, p_limit INT DEFAULT 50)
+RETURNS TABLE (other_word TEXT, freq BIGINT)
+LANGUAGE sql AS $$
+  -- split query into distinct normalized words
+  WITH q AS (
+    SELECT DISTINCT w
+    FROM regexp_split_to_table(lower(coalesce(p_query,'')), '[^a-z0-9]+') AS w
+    WHERE w <> '' AND length(w) >= 2
+  ),
+  need(wcnt) AS (SELECT COUNT(*) FROM q),
+
+  -- 1) titles that match ALL query words (exact-match logic on wi.word)
+  matched_titles AS (
+    SELECT wi.tconst
+    FROM movie.wi wi
+    JOIN q ON q.w = wi.word
+    GROUP BY wi.tconst
+    HAVING COUNT(DISTINCT wi.word) = (SELECT wcnt FROM need)
+  ),
+
+  -- 2) collect ALL words from those titles (no field filter, since column not present)
+  pool AS (
+    SELECT wi.word
+    FROM movie.wi wi
+    JOIN matched_titles mt ON mt.tconst = wi.tconst
+  )
+
+  -- 3) count frequencies, excluding the original query words
+  SELECT p.word AS other_word, COUNT(*)::BIGINT AS freq
+  FROM pool p
+  LEFT JOIN q ON q.w = p.word
+  WHERE q.w IS NULL
+  GROUP BY p.word
+  ORDER BY freq DESC, other_word
+  LIMIT p_limit;
+$$;
+
+SELECT * FROM movie.word_to_words('John wick', 20);
