@@ -533,84 +533,36 @@ FROM framework.popular_cast_for_title(
 
 --1-D.9
 
--- STEP 1: see which categories exist and how common they are
-SELECT category, COUNT(*) AS rows
-FROM movie.credit
-GROUP BY category
-ORDER BY rows DESC
-LIMIT 20;
+DROP FUNCTION IF EXISTS movie.similar_by_genre(text, int);
 
--- also grab a "cast-heavy" movie to test with later
-SELECT t.tconst, t.primary_title, COUNT(*) AS credit_rows
-FROM movie.title t
-JOIN movie.credit c ON c.tconst = t.tconst
-GROUP BY t.tconst, t.primary_title
-ORDER BY credit_rows DESC
-LIMIT 5;
-
--- STEP 2: core function (similar by shared cast, flexible categories)
-CREATE OR REPLACE FUNCTION framework.similar_movies_by_cast(
-  p_user_id   BIGINT,
-  p_tconst    TEXT,
-  p_top_n     INT  DEFAULT 20,
-  p_cat_regex TEXT DEFAULT '^(actor|actress)$'  -- widen to: 'actor|actress|voice|self|cast'
+CREATE OR REPLACE FUNCTION movie.similar_by_genre(
+  p_tconst TEXT,          -- base movie
+  p_limit  INT DEFAULT 10 -- how many to return
 )
 RETURNS TABLE (
-  tconst         TEXT,
-  primary_title  TEXT,
-  shared_actors  INT,
-  average_rating NUMERIC(3,1),
-  num_votes      INT
+  sim_tconst    TEXT,
+  primary_title TEXT,
+  shared_genres INT
 )
-LANGUAGE plpgsql AS $$
-BEGIN
-  -- 1) log the call
-  INSERT INTO framework.user_search_history(user_id, query_text)
-  VALUES (p_user_id, 'similar_movies_by_cast=' || p_tconst || '; cat=' || p_cat_regex);
-
-  -- 2) compute overlap; use a non-reserved CTE name
-  RETURN QUERY
-  WITH target_cast AS (
-    SELECT DISTINCT c.nconst
-    FROM movie.credit c
-    WHERE c.tconst = p_tconst
-      AND (p_cat_regex IS NULL OR c.category ~* p_cat_regex)
-  ),
-  cast_overlap AS (
-    SELECT
-      c2.tconst,
-      COUNT(DISTINCT c2.nconst) AS shared_actors
-    FROM movie.credit c2
-    JOIN target_cast tc ON tc.nconst = c2.nconst
-    WHERE c2.tconst <> p_tconst
-      AND (p_cat_regex IS NULL OR c2.category ~* p_cat_regex)
-    GROUP BY c2.tconst
-  )
+LANGUAGE sql AS $$
   SELECT
-    co.tconst,
-    t.primary_title,
-    co.shared_actors::INT,
-    tr.average_rating,
-    tr.num_votes
-  FROM cast_overlap co
-  JOIN movie.title t       ON t.tconst = co.tconst
-  LEFT JOIN movie.title_rating tr ON tr.tconst = co.tconst
-  ORDER BY
-    co.shared_actors DESC,
-    COALESCE(tr.average_rating, 0) DESC,
-    COALESCE(tr.num_votes, 0)    DESC,
-    t.primary_title
-  LIMIT p_top_n;
-END $$;
+      tg2.tconst AS sim_tconst,
+      t.primary_title,
+      COUNT(DISTINCT tg2.genre)::INT AS shared_genres
+  FROM movie.title_genre tg1
+  JOIN movie.title_genre tg2
+    ON tg2.genre  = tg1.genre
+   AND tg2.tconst <> tg1.tconst
+  JOIN movie.title t
+    ON t.tconst = tg2.tconst
+  WHERE tg1.tconst = $1          -- $1 = p_tconst
+  GROUP BY tg2.tconst, t.primary_title
+  ORDER BY shared_genres DESC, t.primary_title
+  LIMIT COALESCE($2, 10);        -- $2 = p_limit
+$$;
 
--- STEP 3: test (use a tconst you found above)
-SELECT *
-FROM framework.similar_movies_by_cast(
-  framework.get_user_id('shibz'),
-  'tt10093280',
-  15,
-  'actor|actress|voice|self|cast'  -- start broad; narrow later if you want
-);
+SELECT * FROM movie.similar_by_genre('tt0052520', 10);
+
 --1-D.10--Frequent person words (with logging)
 CREATE OR REPLACE FUNCTION framework.person_words(
   p_user_id     BIGINT,
@@ -654,44 +606,95 @@ BEGIN
   LIMIT p_top_n;
 END $$;
 --1-D.11--Exact-match querying
-CREATE OR REPLACE FUNCTION movie.exact_match(p_query TEXT)
+-- D-11 (framework): exact match + logging
+CREATE OR REPLACE FUNCTION framework.exact_match(
+  p_user_id BIGINT,
+  p_query   TEXT,
+  p_limit   INT DEFAULT 100
+)
 RETURNS TABLE (tconst TEXT, primary_title TEXT)
-LANGUAGE sql AS $$
+LANGUAGE plpgsql AS $$
+BEGIN
+  -- log
+  INSERT INTO framework.user_search_history(user_id, query_text)
+  VALUES (p_user_id, 'exact_match=' || p_query || '; limit=' || p_limit);
+
+  -- exact-match
+  RETURN QUERY
   WITH q AS (
     SELECT DISTINCT lower(w) AS w
-    FROM regexp_split_to_table(lower(coalesce(p_query,'')), '[^a-z0-9]+') w
+    FROM regexp_split_to_table(lower(coalesce(p_query,'')), '[^a-z0-9]+') AS w
     WHERE w <> '' AND length(w) >= 2
   ),
-  need AS (SELECT COUNT(*)::int AS wcnt FROM q)
+  need AS (SELECT COUNT(*)::INT AS wcnt FROM q)
   SELECT t.tconst, t.primary_title
   FROM movie.wi wi
-  JOIN q            ON wi.word = q.w
+  JOIN q             ON wi.word = q.w
   JOIN movie.title t ON t.tconst = wi.tconst
   GROUP BY t.tconst, t.primary_title
   HAVING COUNT(DISTINCT q.w) = (SELECT wcnt FROM need)
-  ORDER BY t.primary_title;
-$$;
---D-12--Best-match querying
-DROP FUNCTION IF EXISTS movie.best_match(TEXT);
+  ORDER BY t.primary_title
+  LIMIT p_limit;
+END $$;
 
-CREATE OR REPLACE FUNCTION movie.best_match(p_query TEXT)
-RETURNS TABLE (tconst TEXT, primary_title TEXT, match_count BIGINT)
-LANGUAGE sql AS $$
+-- A: single keyword (should return titles containing "matrix")
+SELECT * 
+FROM framework.exact_match(framework.get_user_id('shibz'), 'matrix', 10);
+
+-- B: multi-keyword exact match (both words must exist in the same title)
+SELECT * 
+FROM framework.exact_match(framework.get_user_id('shibz'), 'lord rings', 20);
+
+-- C: another 2-word test
+SELECT * 
+FROM framework.exact_match(framework.get_user_id('shibz'), 'harry potter', 20);
+
+--D-12--Best-match querying
+-- D-12 (framework): best-match + logging (built on the same tokenizer)
+CREATE OR REPLACE FUNCTION framework.best_match(
+  p_user_id BIGINT,
+  p_query   TEXT,
+  p_limit   INT DEFAULT 200
+)
+RETURNS TABLE (tconst TEXT, primary_title TEXT, match_count INT)
+LANGUAGE plpgsql AS $$
+BEGIN
+  -- log
+  INSERT INTO framework.user_search_history(user_id, query_text)
+  VALUES (p_user_id, 'best_match=' || p_query || '; limit=' || p_limit);
+
+  -- best-match
+  RETURN QUERY
   WITH q AS (
-    SELECT DISTINCT w
+    SELECT DISTINCT lower(w) AS w
     FROM regexp_split_to_table(lower(coalesce(p_query,'')), '[^a-z0-9]+') AS w
     WHERE w <> '' AND length(w) >= 2
+  ),
+  matched AS (
+    SELECT wi.tconst, COUNT(DISTINCT wi.word)::INT AS match_count
+    FROM movie.wi wi
+    JOIN q ON q.w = wi.word
+    GROUP BY wi.tconst
   )
-  SELECT t.tconst, t.primary_title, COUNT(*) AS match_count
-  FROM movie.title t
-  JOIN movie.wi wi ON wi.tconst = t.tconst
-  JOIN q           ON q.w       = wi.word
-  GROUP BY t.tconst, t.primary_title
-  ORDER BY match_count DESC, t.primary_title
-  LIMIT 200;
-$$;
+  SELECT t.tconst, t.primary_title, m.match_count
+  FROM matched m
+  JOIN movie.title t ON t.tconst = m.tconst
+  ORDER BY m.match_count DESC, t.primary_title
+  LIMIT p_limit;
+END $$;
 
-SELECT * FROM movie.best_match('John wick') LIMIT 15;
+-- A. Exact match: BOTH words must exist in the same title
+SELECT * 
+FROM framework.exact_match(framework.get_user_id('shibz'), 'lord rings', 15);
+
+-- B. Best match: titles matching more words rank higher
+SELECT *
+FROM framework.best_match(framework.get_user_id('shibz'), 'lord rings king', 15);
+
+-- C. Single-word queries should work in both
+SELECT * FROM framework.exact_match(framework.get_user_id('shibz'), 'batman', 10);
+SELECT * FROM framework.best_match (framework.get_user_id('shibz'), 'batman', 10);
+
 --1-D.13 Word-to-words querying
 SET search_path = movie, public;
 
@@ -736,3 +739,4 @@ LANGUAGE sql AS $$
 $$;
 
 SELECT * FROM movie.word_to_words('John wick', 20);
+
