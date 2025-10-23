@@ -738,5 +738,5 @@ LANGUAGE sql AS $$
   LIMIT p_limit;
 $$;
 
-SELECT * FROM movie.word_to_words('John wick', 20);
+SELECT * FROM movie.word_to_words('John wick', 10);
 
