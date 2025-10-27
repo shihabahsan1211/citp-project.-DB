@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Movie.Infrastructure.Data;
-using Movie.Domain.DTOs; // 👈 DTOs for clean outer contract
+using Movie.Domain.DTOs;
+using Movie.Infrastructure.Repositories;
 
 namespace Movie.Api.Controllers
 {
@@ -9,40 +8,16 @@ namespace Movie.Api.Controllers
     [Route("api/titles")]
     public class TitlesController : ControllerBase
     {
-        private readonly ImdbDbContext _db;
-        public TitlesController(ImdbDbContext db) => _db = db;
+        private readonly ITitleRepository _repo;
+        public TitlesController(ITitleRepository repo) => _repo = repo;
 
         // GET /api/titles?page=1&pageSize=20&q=batman
         [HttpGet]
-        public async Task<IActionResult> Get(
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 20,
-            [FromQuery] string? q = null)
+        public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string? q = null, CancellationToken ct = default)
         {
-            page = Math.Max(1, page);
-            pageSize = Math.Clamp(pageSize, 1, 100);
+            var (items, total) = await _repo.SearchAsync(q, page, pageSize, ct);
 
-            var query = _db.Titles.AsNoTracking();
-
-            if (!string.IsNullOrWhiteSpace(q))
-                query = query.Where(t => EF.Functions.ILike(t.PrimaryTitle!, $"%{q}%"));
-
-            var total = await query.CountAsync();
-            var items = await query
-                .OrderBy(t => t.PrimaryTitle)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            var totalPages = (int)Math.Ceiling((double)total / pageSize);
-
-            // map to DTOs (outer-facing contract)
-            var data = items.Select(t => new TitleListItemDto
-            {
-                Tconst = t.Tconst,
-                PrimaryTitle = t.PrimaryTitle,
-                Self = $"/api/titles/{t.Tconst}"
-            });
+            var totalPages = (int)Math.Ceiling((double)total / Math.Clamp(pageSize, 1, 100));
 
             var links = new
             {
@@ -51,19 +26,23 @@ namespace Movie.Api.Controllers
                 prev = page > 1 ? Url.Action(null, new { page = page - 1, pageSize, q }) : null
             };
 
+            var data = items.Select(t => new TitleListItemDto
+            {
+                Tconst = t.Tconst,
+                PrimaryTitle = t.PrimaryTitle,
+                Self = $"/api/titles/{t.Tconst}"
+            });
+
             return Ok(new { page, pageSize, total, totalPages, links, data });
         }
 
-        // GET /api/titles/{tconst}
+        // GET /api/titles/tt1234567
         [HttpGet("{tconst}")]
-        public async Task<IActionResult> GetById(string tconst)
+        public async Task<IActionResult> GetById(string tconst, CancellationToken ct = default)
         {
-            var t = await _db.Titles.AsNoTracking()
-                                    .FirstOrDefaultAsync(x => x.Tconst == tconst);
-
+            var t = await _repo.GetByIdAsync(tconst, ct);
             if (t is null) return NotFound();
 
-            // detail DTO (clear, explicit fields)
             var dto = new TitleDetailDto
             {
                 Tconst = t.Tconst,

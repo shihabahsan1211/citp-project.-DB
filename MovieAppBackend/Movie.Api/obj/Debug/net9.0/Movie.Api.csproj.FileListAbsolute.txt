@@ -6,6 +6,7 @@ C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Mov
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\bin\Debug\net9.0\Movie.Api.runtimeconfig.json
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\bin\Debug\net9.0\Movie.Api.dll
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\bin\Debug\net9.0\Movie.Api.pdb
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\bin\Debug\net9.0\EFCore.NamingConventions.dll
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -53,4 +54,3 @@ C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Mov
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\obj\Debug\net9.0\Movie.Api.pdb
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\obj\Debug\net9.0\Movie.Api.genruntimeconfig.cache
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\obj\Debug\net9.0\ref\Movie.Api.dll
-C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project-DB\MovieAppBackend\Movie.Api\bin\Debug\net9.0\EFCore.NamingConventions.dll

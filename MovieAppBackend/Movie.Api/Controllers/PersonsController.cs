@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Movie.Infrastructure.Data;
+using Movie.Domain.DTOs;
+using Movie.Infrastructure.Repositories;
 
 namespace Movie.Api.Controllers
 {
@@ -8,27 +8,16 @@ namespace Movie.Api.Controllers
     [Route("api/persons")]
     public class PersonsController : ControllerBase
     {
-        private readonly ImdbDbContext _db;
-        public PersonsController(ImdbDbContext db) => _db = db;
+        private readonly IPersonRepository _repo;
+        public PersonsController(IPersonRepository repo) => _repo = repo;
 
         // GET /api/persons?page=1&pageSize=20&q=tom
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string? q = null)
+        public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string? q = null, CancellationToken ct = default)
         {
-            page = Math.Max(1, page);
-            pageSize = Math.Clamp(pageSize, 1, 100);
+            var (items, total) = await _repo.SearchAsync(q, page, pageSize, ct);
 
-            var query = _db.Persons.AsNoTracking();
-            if (!string.IsNullOrWhiteSpace(q))
-                query = query.Where(p => EF.Functions.ILike(p.PrimaryName!, $"%{q}%"));
-
-            var total = await query.CountAsync();
-            var items = await query.OrderBy(p => p.PrimaryName)
-                                   .Skip((page - 1) * pageSize)
-                                   .Take(pageSize)
-                                   .ToListAsync();
-
-            var totalPages = (int)Math.Ceiling((double)total / pageSize);
+            var totalPages = (int)Math.Ceiling((double)total / Math.Clamp(pageSize, 1, 100));
 
             var links = new
             {
@@ -37,11 +26,11 @@ namespace Movie.Api.Controllers
                 prev = page > 1 ? Url.Action(null, new { page = page - 1, pageSize, q }) : null
             };
 
-            var data = items.Select(p => new
+            var data = items.Select(p => new PersonListItemDto
             {
-                nconst = p.Nconst,
-                primaryName = p.PrimaryName,
-                self = $"/api/persons/{p.Nconst}"
+                Nconst = p.Nconst,
+                PrimaryName = p.PrimaryName,
+                Self = $"/api/persons/{p.Nconst}"
             });
 
             return Ok(new { page, pageSize, total, totalPages, links, data });
@@ -49,12 +38,21 @@ namespace Movie.Api.Controllers
 
         // GET /api/persons/nm1234567
         [HttpGet("{nconst}")]
-        public async Task<IActionResult> GetById(string nconst)
+        public async Task<IActionResult> GetById(string nconst, CancellationToken ct = default)
         {
-            var person = await _db.Persons.AsNoTracking().FirstOrDefaultAsync(x => x.Nconst == nconst);
-            return person == null
-                ? NotFound()
-                : Ok(new { person.Nconst, person.PrimaryName, self = $"/api/persons/{person.Nconst}" });
+            var p = await _repo.GetByIdAsync(nconst, ct);
+            if (p is null) return NotFound();
+
+            var dto = new PersonDetailDto
+            {
+                Nconst = p.Nconst,
+                PrimaryName = p.PrimaryName,
+                BirthYear = p.BirthYear,
+                DeathYear = p.DeathYear,
+                Self = $"/api/persons/{p.Nconst}"
+            };
+
+            return Ok(dto);
         }
     }
 }

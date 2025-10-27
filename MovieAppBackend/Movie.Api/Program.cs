@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Movie.Infrastructure.Data;
+using Movie.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,14 @@ builder.Services.AddDbContext<ImdbDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
            .UseSnakeCaseNamingConvention()
 );
+// Repositories 👇
+builder.Services.AddScoped<ITitleRepository, TitleRepository>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+
+// Swagger, Controllers, etc.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
