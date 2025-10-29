@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Movie.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;       // <-- needed for IPasswordHasher / PasswordHasher
+using Movie.Infrastructure.Models;         // <-- AppUser
 using Movie.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +31,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// --- Auth wiring  ---
+builder.Services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,7 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("AllowFrontend");  //  use CORS policy
-app.UseHttpsRedirection();
+//---app.UseHttpsRedirection();---This we will ue when we implement sequrity--
 app.UseAuthorization();
 app.MapControllers();
 
