@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {}
+    "C:\\Users\\lizac\\Documents\\GitHub\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
+    "C:\\Users\\lizac\\Documents\\GitHub\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\lizac\\Documents\\GitHub\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
         "projectName": "Movie.Domain",
-        "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
-        "packagesPath": "C:\\Users\\Gurpreet Kaur\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project-DB\\MovieAppBackend\\Movie.Domain\\obj\\",
+        "projectPath": "C:\\Users\\lizac\\Documents\\GitHub\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
+        "packagesPath": "C:\\Users\\lizac\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lizac\\Documents\\GitHub\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Gurpreet Kaur\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\lizac\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -40,7 +38,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -61,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
