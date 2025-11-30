@@ -35,19 +35,5 @@ namespace Movie.Infrastructure.Repositories
             var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
             return result == PasswordVerificationResult.Success ? user : null;
         }
-
-        public async Task<RefreshToken> CreateSessionAsync(int userId, CancellationToken ct = default)
-        {
-            var token = new RefreshToken
-            {
-                UserId = userId,
-                Token = Guid.NewGuid().ToString("N"),
-                ExpiresAt = DateTime.UtcNow.AddDays(7),
-                Revoked = false
-            };
-            _db.RefreshTokens.Add(token);
-            await _db.SaveChangesAsync(ct);
-            return token;
-        }
     }
 }

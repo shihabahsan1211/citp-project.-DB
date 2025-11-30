@@ -44,7 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("AllowFrontend");  //  use CORS policy
-//---app.UseHttpsRedirection();---This we will ue when we implement sequrity--
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 

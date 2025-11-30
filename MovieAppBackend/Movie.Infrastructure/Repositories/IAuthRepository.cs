@@ -7,6 +7,6 @@ namespace Movie.Infrastructure.Repositories
         Task<AppUser?> GetByUsernameAsync(string username, CancellationToken ct = default);
         Task<AppUser> CreateUserAsync(AppUser user, string password, CancellationToken ct = default);
         Task<AppUser?> ValidateUserAsync(string username, string password, CancellationToken ct = default);
-        Task<RefreshToken> CreateSessionAsync(int userId, CancellationToken ct = default);
+        
     }
 }

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Movie.Infrastructure.Models;   // Title, Person, AppUser, RefreshToken
+using Movie.Infrastructure.Models;
 
 namespace Movie.Infrastructure.Data
 {
@@ -12,9 +12,8 @@ namespace Movie.Infrastructure.Data
         public DbSet<Title> Titles { get; set; } = null!;
         public DbSet<Person> Persons { get; set; } = null!;
 
-        // Auth / framework entities – schema: framework
+        // Auth entity – schema: framework
         public DbSet<AppUser> AppUsers { get; set; } = null!;
-        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder b)
         {
@@ -27,34 +26,31 @@ namespace Movie.Infrastructure.Data
                 .ToTable("person", "movie")
                 .HasKey(p => p.Nconst);
 
-            // ---- Framework schema (Auth) ----
+            // ---- Framework schema (REAL TABLE) ----
             b.Entity<AppUser>(e =>
             {
-                e.ToTable("users", "framework");
-                e.HasKey(x => x.Id);
+                e.ToTable("app_user", "framework");
 
-                e.Property(x => x.Username).IsRequired().HasMaxLength(50);
-                e.Property(x => x.Email).IsRequired().HasMaxLength(120);
-                e.Property(x => x.PasswordHash).IsRequired();
+                // ✅ REAL DB column name
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).HasColumnName("user_id");
+
+                e.Property(x => x.Username)
+                    .HasColumnName("username")
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                e.Property(x => x.Email)
+                    .HasColumnName("email")
+                    .IsRequired()
+                    .HasMaxLength(120);
+
+                e.Property(x => x.PasswordHash)
+                    .HasColumnName("password_hash")
+                    .IsRequired();
 
                 e.HasIndex(x => x.Username).IsUnique();
                 e.HasIndex(x => x.Email).IsUnique();
-            });
-
-            b.Entity<RefreshToken>(e =>
-            {
-                e.ToTable("refresh_tokens", "framework");
-                e.HasKey(x => x.Id);
-
-                e.Property(x => x.Token).IsRequired();
-                e.Property(x => x.ExpiresAt).IsRequired();
-
-                e.HasOne(x => x.User)
-                 .WithMany(u => u.RefreshTokens)
-                 .HasForeignKey(x => x.UserId)
-                 .OnDelete(DeleteBehavior.Cascade);
-
-                e.HasIndex(x => x.Token).IsUnique();
             });
         }
     }
