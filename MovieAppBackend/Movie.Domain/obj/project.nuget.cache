@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< Updated upstream
   "dgSpecHash": "zai9RbjF4Vc=",
   "success": true,
   "projectFilePath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
+=======
+  "dgSpecHash": "Kak0L0DnjxA=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
+>>>>>>> Stashed changes
   "expectedPackageFiles": [],
   "logs": []
 }
