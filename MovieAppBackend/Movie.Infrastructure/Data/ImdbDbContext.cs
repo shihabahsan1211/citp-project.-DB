@@ -93,6 +93,7 @@ namespace Movie.Infrastructure.Data
 
                 e.Property(x => x.UserId).HasColumnName("user_id");
                 e.Property(x => x.Tconst).HasColumnName("tconst");
+                e.Property(x => x.BookmarkedAt).HasColumnName("bookmarked_at");
             });
 
             // ---- framework.user_bookmark_person ----
@@ -115,7 +116,7 @@ namespace Movie.Infrastructure.Data
                 e.Property(x => x.SearchId).HasColumnName("search_id");
                 e.Property(x => x.UserId).HasColumnName("user_id");
                 e.Property(x => x.QueryText).HasColumnName("query_text");
-                e.Property(x => x.PerformedAt).HasColumnName("performed_at");
+                e.Property(x => x.SearchedAt).HasColumnName("search_time");
             });
         }
     }
