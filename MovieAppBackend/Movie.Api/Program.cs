@@ -25,6 +25,7 @@ builder.Services.AddDbContext<ImdbDbContext>(options =>
 // Repositories 
 builder.Services.AddScoped<ITitleRepository, TitleRepository>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IUserActivityRepository, UserActivityRepository>();
 
 // Swagger, Controllers, etc.
 builder.Services.AddControllers();

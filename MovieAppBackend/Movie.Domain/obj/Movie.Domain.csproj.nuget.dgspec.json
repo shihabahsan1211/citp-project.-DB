@@ -1,7 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< Updated upstream
     "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {}
   },
   "projects": {
@@ -13,19 +12,6 @@
         "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
         "packagesPath": "C:\\Users\\Gurpreet Kaur\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\obj\\",
-=======
-    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
-        "projectName": "Movie.Domain",
-        "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
-        "packagesPath": "C:\\Users\\Gurpreet Kaur\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\obj\\",
->>>>>>> Stashed changes
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gurpreet Kaur\\AppData\\Roaming\\NuGet\\NuGet.Config",

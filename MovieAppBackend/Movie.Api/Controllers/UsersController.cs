@@ -20,7 +20,6 @@ namespace Movie.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
         {
-            // check if username already exists
             var existing = await _auth.GetByUsernameAsync(dto.Username);
             if (existing != null)
                 return BadRequest("User already exists");
@@ -33,15 +32,17 @@ namespace Movie.Api.Controllers
 
             var created = await _auth.CreateUserAsync(user, dto.Password);
 
-            return Ok(new
+            var response = new UserResponseDto
             {
-                created.Id,
-                created.Username,
-                created.Email
-            });
+                Id = created.Id,
+                Username = created.Username,
+                Email = created.Email
+            };
+
+            return Ok(response);
         }
 
-        // ✅ LOGIN (no refresh token, just validate user)
+        // ✅ LOGIN
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
         {
@@ -49,13 +50,14 @@ namespace Movie.Api.Controllers
             if (user == null)
                 return Unauthorized("Invalid credentials");
 
-            // simple response – user is valid
-            return Ok(new
+            var response = new UserResponseDto
             {
-                user.Id,
-                user.Username,
-                user.Email
-            });
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email
+            };
+
+            return Ok(response);
         }
     }
 }

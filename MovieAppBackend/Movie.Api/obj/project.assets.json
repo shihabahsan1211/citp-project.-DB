@@ -1329,19 +1329,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< Updated upstream
       "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj",
       "projectName": "Movie.Api",
       "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj",
       "packagesPath": "C:\\Users\\Gurpreet Kaur\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Api\\obj\\",
-=======
-      "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj",
-      "projectName": "Movie.Api",
-      "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj",
-      "packagesPath": "C:\\Users\\Gurpreet Kaur\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Api\\obj\\",
->>>>>>> Stashed changes
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Gurpreet Kaur\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1358,19 +1350,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-<<<<<<< Updated upstream
             "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
               "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj"
             },
             "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj": {
               "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj"
-=======
-            "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
-              "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj"
-            },
-            "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj"
->>>>>>> Stashed changes
             }
           }
         }
