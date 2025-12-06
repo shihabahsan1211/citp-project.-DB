@@ -35,5 +35,19 @@ namespace Movie.Infrastructure.Repositories
         Task<IReadOnlyList<UserTitleRating>> GetTitleRatingsAsync(
             int userId,
             CancellationToken ct = default);
+            Task AddPersonBookmarkAsync(int userId, string nconst, CancellationToken ct = default);
+            Task<IReadOnlyList<UserBookmarkPerson>> GetPersonBookmarksAsync(int userId, CancellationToken ct = default);
+
+        // ---------- PERSON RATINGS ---------- 
+        Task<UserPersonRating> AddOrUpdatePersonRatingAsync(
+            int userId,
+            string nconst,
+            int rating,
+            CancellationToken ct = default);
+
+        Task<IReadOnlyList<UserPersonRating>> GetPersonRatingsAsync(
+            int userId,
+            CancellationToken ct = default);
+    
     }
 }

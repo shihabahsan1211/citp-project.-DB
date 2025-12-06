@@ -22,14 +22,19 @@ namespace Movie.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder b)
         {
-            // ---- IMDB schema ----
-            b.Entity<Title>()
-                .ToTable("title", "movie")
-                .HasKey(t => t.Tconst);
+            // ---- movie.title ----
+            b.Entity<Title>(e =>
+            {
+                e.ToTable("title", "movie");
+                e.HasKey(t => t.Tconst);
+            });
 
-            b.Entity<Person>()
-                .ToTable("person", "movie")
-                .HasKey(p => p.Nconst);
+            // ---- movie.person ----
+            b.Entity<Person>(e =>
+            {
+                e.ToTable("person", "movie");
+                e.HasKey(p => p.Nconst);
+            });
 
             // ---- framework.app_user ----
             b.Entity<AppUser>(e =>
@@ -93,7 +98,10 @@ namespace Movie.Infrastructure.Data
 
                 e.Property(x => x.UserId).HasColumnName("user_id");
                 e.Property(x => x.Tconst).HasColumnName("tconst");
-                e.Property(x => x.BookmarkedAt).HasColumnName("bookmarked_at");
+
+                // NOTE: DB me "bookmarked_at" column nahi hai,
+                // agar model me BookmarkedAt property hai to usse
+                // [NotMapped] kar do, ya property hi hata do.
             });
 
             // ---- framework.user_bookmark_person ----
@@ -116,7 +124,9 @@ namespace Movie.Infrastructure.Data
                 e.Property(x => x.SearchId).HasColumnName("search_id");
                 e.Property(x => x.UserId).HasColumnName("user_id");
                 e.Property(x => x.QueryText).HasColumnName("query_text");
-                e.Property(x => x.SearchedAt).HasColumnName("search_time");
+
+                // Property name SearchedAt  -> column performed_at
+                e.Property(x => x.SearchedAt).HasColumnName("performed_at");
             });
         }
     }

@@ -14,6 +14,7 @@ namespace Movie.Infrastructure.Repositories
         }
 
         // ---------- SEARCH HISTORY ----------
+
         public async Task AddSearchAsync(
             int userId,
             string queryText,
@@ -23,6 +24,7 @@ namespace Movie.Infrastructure.Repositories
             {
                 UserId = userId,
                 QueryText = queryText,
+                // mapped to column search_time in the database
                 SearchedAt = DateTime.UtcNow
             };
 
@@ -43,6 +45,7 @@ namespace Movie.Infrastructure.Repositories
         }
 
         // ---------- TITLE BOOKMARKS ----------
+
         public async Task AddTitleBookmarkAsync(
             int userId,
             string tconst,
@@ -51,8 +54,9 @@ namespace Movie.Infrastructure.Repositories
             var entity = new UserBookmarkTitle
             {
                 UserId = userId,
-                Tconst = tconst,
-                BookmarkedAt = DateTime.UtcNow
+                Tconst = tconst
+                // NOTE: There is no BookmarkedAt column in the database,
+                // so we do not set any timestamp here.
             };
 
             _db.UserBookmarkTitles.Add(entity);
@@ -65,11 +69,13 @@ namespace Movie.Infrastructure.Repositories
         {
             return await _db.UserBookmarkTitles
                 .Where(x => x.UserId == userId)
-                .OrderByDescending(x => x.BookmarkedAt)
+                // There is no date column, so we simply order by tconst (or remove this line if not needed).
+                .OrderBy(x => x.Tconst)
                 .ToListAsync(ct);
         }
 
         // ---------- TITLE RATINGS ----------
+
         public async Task<UserTitleRating> AddOrUpdateTitleRatingAsync(
             int userId,
             string tconst,
@@ -88,6 +94,7 @@ namespace Movie.Infrastructure.Repositories
                     Rating = rating,
                     RatedAt = DateTime.UtcNow
                 };
+
                 _db.UserTitleRatings.Add(existing);
             }
             else
@@ -109,5 +116,67 @@ namespace Movie.Infrastructure.Repositories
                 .OrderByDescending(x => x.RatedAt)
                 .ToListAsync(ct);
         }
+        public async Task AddPersonBookmarkAsync(int userId, string nconst, CancellationToken ct = default)
+{
+    var entity = new UserBookmarkPerson
+    {
+        UserId = userId,
+        Nconst = nconst
+    };
+
+    _db.UserBookmarkPersons.Add(entity);
+    await _db.SaveChangesAsync(ct);
+}
+
+public async Task<IReadOnlyList<UserBookmarkPerson>> GetPersonBookmarksAsync(
+    int userId,
+    CancellationToken ct = default)
+{
+    return await _db.UserBookmarkPersons
+        .Where(x => x.UserId == userId)
+        .OrderBy(x => x.Nconst)
+        .ToListAsync(ct);
+}
+// ---------- PERSON RATINGS ----------
+public async Task<UserPersonRating> AddOrUpdatePersonRatingAsync(
+    int userId,
+    string nconst,
+    int rating,
+    CancellationToken ct = default)
+{
+    var existing = await _db.UserPersonRatings
+        .SingleOrDefaultAsync(x => x.UserId == userId && x.Nconst == nconst, ct);
+
+    if (existing is null)
+    {
+        existing = new UserPersonRating
+        {
+            UserId = userId,
+            Nconst = nconst,
+            Rating = rating,
+            RatedAt = DateTime.UtcNow
+        };
+        _db.UserPersonRatings.Add(existing);
+    }
+    else
+    {
+        existing.Rating = rating;
+        existing.RatedAt = DateTime.UtcNow;
+    }
+
+    await _db.SaveChangesAsync(ct);
+    return existing;
+}
+
+public async Task<IReadOnlyList<UserPersonRating>> GetPersonRatingsAsync(
+    int userId,
+    CancellationToken ct = default)
+{
+    return await _db.UserPersonRatings
+        .Where(x => x.UserId == userId)
+        .OrderByDescending(x => x.RatedAt)
+        .ToListAsync(ct);
+}
+
     }
 }
