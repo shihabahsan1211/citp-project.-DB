@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj": {}
+    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj": {
+    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj",
+        "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj",
         "projectName": "Movie.Api",
-        "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj",
+        "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Api\\Movie.Api.csproj",
         "packagesPath": "C:\\Users\\Gurpreet Kaur\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Api\\obj\\",
+        "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gurpreet Kaur\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,11 +28,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
-                "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj"
+              "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
+                "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj"
               },
-              "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj"
+              "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj"
               }
             }
           }
@@ -101,14 +101,14 @@
         }
       }
     },
-    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
+    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
         "projectName": "Movie.Domain",
-        "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
+        "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj",
         "packagesPath": "C:\\Users\\Gurpreet Kaur\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\obj\\",
+        "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gurpreet Kaur\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -162,14 +162,14 @@
         }
       }
     },
-    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj": {
+    "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj",
         "projectName": "Movie.Infrastructure",
-        "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Infrastructure\\Movie.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\Gurpreet Kaur\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gurpreet Kaur\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -186,8 +186,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
-                "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp_Portfolio2\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj"
+              "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj": {
+                "projectPath": "C:\\Users\\Gurpreet Kaur\\AndroidStudioProjects\\citp-project.-DB\\MovieAppBackend\\Movie.Domain\\Movie.Domain.csproj"
               }
             }
           }

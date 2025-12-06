@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Movie.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2697d98333d7e6d91276bc206739d54636ed871")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+880e4bf7b3a490918ce554a23b1da619157527fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("Movie.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Movie.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
