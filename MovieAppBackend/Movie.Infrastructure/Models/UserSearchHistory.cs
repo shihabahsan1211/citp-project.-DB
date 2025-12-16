@@ -1,8 +1,13 @@
-public class UserSearchHistory
+namespace Movie.Infrastructure.Models
 {
-    public int SearchId { get; set; }
-    public int UserId { get; set; }
-    public string QueryText { get; set; } = null!;
-    public DateTime SearchedAt { get; set; }
-    public DateTime PerformedAt { get; set; } 
+    public class UserSearchHistory
+    {
+        public int SearchId { get; set; }          
+
+        public int UserId { get; set; }           
+
+        public string QueryText { get; set; } = null!;   
+
+        public DateTime SearchedAt { get; set; }        
+    }
 }

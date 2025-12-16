@@ -4,6 +4,9 @@ namespace Movie.Domain.DTOs
     {
         public string Tconst { get; set; } = null!;
         public string? PrimaryTitle { get; set; }
+        public int? StartYear { get; set; }
+        public int? EndYear { get; set; }
+
         public string Self { get; set; } = null!;
     }
 

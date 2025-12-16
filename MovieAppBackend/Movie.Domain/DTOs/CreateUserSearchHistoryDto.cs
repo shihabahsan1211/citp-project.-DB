@@ -1,7 +1,5 @@
-namespace Movie.Domain.DTOs
+public class CreateUserSearchHistoryDto
 {
-    public class CreateUserSearchHistoryDto
-    {
-        public string QueryText { get; set; } = null!;
-    }
+    public string QueryText { get; set; } = null!;
+    public DateTime? SearchedOn { get; set; }
 }

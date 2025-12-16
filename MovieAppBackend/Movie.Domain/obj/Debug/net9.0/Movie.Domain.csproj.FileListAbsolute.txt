@@ -10,3 +10,15 @@ C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp_Portfolio2\MovieAppBackend\Mov
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp_Portfolio2\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\refint\Movie.Domain.dll
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp_Portfolio2\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\Movie.Domain.pdb
 C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp_Portfolio2\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\ref\Movie.Domain.dll
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\bin\Debug\net9.0\Movie.Domain.deps.json
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\bin\Debug\net9.0\Movie.Domain.dll
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\bin\Debug\net9.0\Movie.Domain.pdb
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\Movie.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\Movie.Domain.AssemblyInfoInputs.cache
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\Movie.Domain.AssemblyInfo.cs
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\Movie.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\Movie.Domain.sourcelink.json
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\Movie.Domain.dll
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\refint\Movie.Domain.dll
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\Movie.Domain.pdb
+C:\Users\Gurpreet Kaur\AndroidStudioProjects\citp-project.-DB\MovieAppBackend\Movie.Domain\obj\Debug\net9.0\ref\Movie.Domain.dll

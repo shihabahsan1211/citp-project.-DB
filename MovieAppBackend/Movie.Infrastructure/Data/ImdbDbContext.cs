@@ -22,21 +22,21 @@ namespace Movie.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder b)
         {
-            // ---- movie.title ----
+            // movie.title
             b.Entity<Title>(e =>
             {
                 e.ToTable("title", "movie");
                 e.HasKey(t => t.Tconst);
             });
 
-            // ---- movie.person ----
+            // movie.person 
             b.Entity<Person>(e =>
             {
                 e.ToTable("person", "movie");
                 e.HasKey(p => p.Nconst);
             });
 
-            // ---- framework.app_user ----
+            // framework.app_user 
             b.Entity<AppUser>(e =>
             {
                 e.ToTable("app_user", "framework");
@@ -62,7 +62,7 @@ namespace Movie.Infrastructure.Data
                 e.HasIndex(x => x.Email).IsUnique();
             });
 
-            // ---- framework.user_title_rating ----
+            // framework.user_title_rating 
             b.Entity<UserTitleRating>(e =>
             {
                 e.ToTable("user_title_rating", "framework");
@@ -75,7 +75,7 @@ namespace Movie.Infrastructure.Data
                 e.Property(x => x.RatedAt).HasColumnName("rated_at");
             });
 
-            // ---- framework.user_person_rating ----
+            //framework.user_person_rating
             b.Entity<UserPersonRating>(e =>
             {
                 e.ToTable("user_person_rating", "framework");
@@ -88,7 +88,7 @@ namespace Movie.Infrastructure.Data
                 e.Property(x => x.RatedAt).HasColumnName("rated_at");
             });
 
-            // ---- framework.user_bookmark_title ----
+            // framework.user_bookmark_title 
             b.Entity<UserBookmarkTitle>(e =>
             {
                 e.ToTable("user_bookmark_title", "framework");
@@ -98,13 +98,9 @@ namespace Movie.Infrastructure.Data
 
                 e.Property(x => x.UserId).HasColumnName("user_id");
                 e.Property(x => x.Tconst).HasColumnName("tconst");
-
-                // NOTE: DB me "bookmarked_at" column nahi hai,
-                // agar model me BookmarkedAt property hai to usse
-                // [NotMapped] kar do, ya property hi hata do.
             });
 
-            // ---- framework.user_bookmark_person ----
+            //  framework.user_bookmark_person 
             b.Entity<UserBookmarkPerson>(e =>
             {
                 e.ToTable("user_bookmark_person", "framework");
@@ -115,7 +111,7 @@ namespace Movie.Infrastructure.Data
                 e.Property(x => x.Nconst).HasColumnName("nconst");
             });
 
-            // ---- framework.user_search_history ----
+            // framework.user_search_history 
             b.Entity<UserSearchHistory>(e =>
             {
                 e.ToTable("user_search_history", "framework");

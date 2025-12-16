@@ -30,6 +30,10 @@ namespace Movie.Api.Controllers
             {
                 Tconst = t.Tconst,
                 PrimaryTitle = t.PrimaryTitle,
+                StartYear = t.StartYear,
+            EndYear = t.EndYear,
+
+
                 Self = $"/api/titles/{t.Tconst}"
             });
 

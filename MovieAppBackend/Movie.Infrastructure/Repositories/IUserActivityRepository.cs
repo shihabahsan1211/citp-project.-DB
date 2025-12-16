@@ -4,10 +4,11 @@ namespace Movie.Infrastructure.Repositories
 {
     public interface IUserActivityRepository
     {
-        // ---------- SEARCH HISTORY ----------
+        // SEARCH HISTORY 
         Task AddSearchAsync(
             int userId,
             string queryText,
+            DateTime searchedAt,
             CancellationToken ct = default);
 
         Task<IReadOnlyList<UserSearchHistory>> GetSearchHistoryAsync(
@@ -15,7 +16,18 @@ namespace Movie.Infrastructure.Repositories
             int limit = 20,
             CancellationToken ct = default);
 
-        // ---------- TITLE BOOKMARKS ----------
+        // delete one history item
+        Task<bool> DeleteSearchAsync(
+            int userId,
+            int searchId,
+            CancellationToken ct = default);
+
+        // clear all history for a user
+        Task<int> ClearSearchHistoryAsync(
+            int userId,
+            CancellationToken ct = default);
+
+        //TITLE BOOKMARKS
         Task AddTitleBookmarkAsync(
             int userId,
             string tconst,
@@ -25,7 +37,17 @@ namespace Movie.Infrastructure.Repositories
             int userId,
             CancellationToken ct = default);
 
-        // ---------- TITLE RATINGS ----------
+        //PERSON BOOKMARKS
+        Task AddPersonBookmarkAsync(
+            int userId,
+            string nconst,
+            CancellationToken ct = default);
+
+        Task<IReadOnlyList<UserBookmarkPerson>> GetPersonBookmarksAsync(
+            int userId,
+            CancellationToken ct = default);
+
+        // TITLE RATINGS
         Task<UserTitleRating> AddOrUpdateTitleRatingAsync(
             int userId,
             string tconst,
@@ -35,10 +57,8 @@ namespace Movie.Infrastructure.Repositories
         Task<IReadOnlyList<UserTitleRating>> GetTitleRatingsAsync(
             int userId,
             CancellationToken ct = default);
-            Task AddPersonBookmarkAsync(int userId, string nconst, CancellationToken ct = default);
-            Task<IReadOnlyList<UserBookmarkPerson>> GetPersonBookmarksAsync(int userId, CancellationToken ct = default);
 
-        // ---------- PERSON RATINGS ---------- 
+        //PERSON RATINGS
         Task<UserPersonRating> AddOrUpdatePersonRatingAsync(
             int userId,
             string nconst,
@@ -48,6 +68,5 @@ namespace Movie.Infrastructure.Repositories
         Task<IReadOnlyList<UserPersonRating>> GetPersonRatingsAsync(
             int userId,
             CancellationToken ct = default);
-    
     }
 }

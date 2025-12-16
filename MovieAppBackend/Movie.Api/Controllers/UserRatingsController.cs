@@ -15,9 +15,9 @@ namespace Movie.Api.Controllers
             _repo = repo;
         }
 
-        // ---------- TITLE RATINGS ----------
+        // TITLE RATINGS 
 
-        // POST /api/users/11/ratings/titles
+        // POST /api/users/id/ratings/titles
         [HttpPost("titles")]
         public async Task<IActionResult> RateTitle(
             int userId,
@@ -46,7 +46,7 @@ namespace Movie.Api.Controllers
             return Ok(result);
         }
 
-        // GET /api/users/11/ratings/titles
+        // GET /api/users/user id /ratings/titles
         [HttpGet("titles")]
         public async Task<IActionResult> GetTitleRatings(
             int userId,
@@ -64,9 +64,9 @@ namespace Movie.Api.Controllers
             return Ok(result);
         }
 
-        // ---------- PERSON RATINGS ----------
+        // PERSON RATINGS
 
-        // POST /api/users/11/ratings/persons
+        // POST /api/users/user id /ratings/persons
         [HttpPost("persons")]
         public async Task<IActionResult> RatePerson(
             int userId,
@@ -95,7 +95,7 @@ namespace Movie.Api.Controllers
             return Ok(result);
         }
 
-        // GET /api/users/11/ratings/persons
+        // GET /api/users/user id /ratings/persons
         [HttpGet("persons")]
         public async Task<IActionResult> GetPersonRatings(
             int userId,

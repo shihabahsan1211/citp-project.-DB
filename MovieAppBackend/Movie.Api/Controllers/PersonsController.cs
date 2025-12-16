@@ -30,6 +30,11 @@ namespace Movie.Api.Controllers
             {
                 Nconst = p.Nconst,
                 PrimaryName = p.PrimaryName,
+                BirthYear = p.BirthYear,
+            DeathYear = p.DeathYear,
+             PrimaryProfession = p.PrimaryProfession,
+
+
                 Self = $"/api/persons/{p.Nconst}"
             });
 
